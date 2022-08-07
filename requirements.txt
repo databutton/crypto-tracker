@@ -1,0 +1,5 @@
+databutton
+ta
+ccxt
+pandas 
+streamlit_option_menu 

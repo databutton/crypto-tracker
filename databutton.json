@@ -1,0 +1,11 @@
+{
+  "uid": "8293a479-d648-44ac-a437-57bc35c27092",
+  "name": "crypto-tracker",
+  "exclude": [
+    "venv",
+    ".venv",
+    "__pycache__",
+    ".databutton", 
+    "myscecrets"
+  ]
+}
