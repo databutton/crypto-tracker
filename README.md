@@ -1,8 +1,8 @@
-# Getting started with Databutton
+# The Cypto Tracker experiment
+Crypto tracker continuously monitors Crypto assets on FTX of your choice, evaluates them against your chosen strategy, and sends you notifications on e-mail, Slack, or Discord.
 
-This project was created with `databutton create`.
 
-## Available scripts
+## How to work with Crypto tracker 
 
 ### `databutton start`
 Starts the development server.
@@ -17,6 +17,10 @@ Note that in order to deploy you need a user and a project in Databutton.
 ### `databutton build`
 Builds and bundles the project, will generate all necessary files for production.\
 This is automatically done when running `databutton deploy`, so it should only be necessary if you're deploying to your own infrastructure.
+
+## How to add your own strategies
+Strategies are buy, sell, or wait, signals that are emitted through evaluation one function in strategies.py. So, to add you own logic, just add one more function in there, but remember to also add the decorator. 
+
 
 ## Learn more
 
