@@ -3,3 +3,5 @@ ta
 ccxt
 pandas 
 streamlit_option_menu 
+discord_webhook
+plotly
