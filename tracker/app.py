@@ -1,11 +1,10 @@
-from cgitb import enable
 import inspect
-from turtle import width
 import ccxt
 import databutton as db
 import streamlit as st
 import pandas as pd
 from streamlit_option_menu import option_menu
+from streamlit_autorefresh import st_autorefresh
 from tracker.slack import post_message_to_slack
 from discord_webhook import DiscordWebhook
 from tracker.strategies import list_of_strategies
@@ -16,6 +15,8 @@ import plotly.graph_objects as go
 
 @db.apps.streamlit(route='/app')
 def app():
+    count = st_autorefresh(interval=30000, limit=1000, key="fizzbuzzcounter")
+
     ftx = ccxt.ftx()
     markets = ftx.load_markets()
     monitors = db.storage.dataframes.get('monitored_signals')
@@ -32,7 +33,7 @@ def app():
         st.markdown("""---""")
         show = st.container()
 
-        t1, t2, t3, t4, t5, t6 = st.columns(6)
+        t1, t2, t3, t4, t5, t6= st.columns(6)
         t1.write('**NAME**')
         t2.write('**TICKER**')
         t3.write('**ADVICE**')
@@ -40,7 +41,9 @@ def app():
         t5.write('**CHECKED**')
         t6.write('  ')
         
+        
         view_buttons={}
+        delete_buttons={}
         for ix, row in monitors.iterrows():
             t1, t2, t3, t4, t5, t6 = st.columns(6)
             t1.write(row['Name'])
@@ -48,7 +51,9 @@ def app():
             t3.write(row['Advice'])
             t4.write(row['Strategy'])
             t5.write(row['Checked'])
-            view_buttons[row['Ticker']] = t6.button('View', key=row['Ticker'])
+            with t6.expander("Actions"):
+                view_buttons[row['Ticker']] = st.button('View', key=row['Ticker'])
+                delete_buttons[row['Ticker']] = st.button('Delete', key=row['Ticker'])
 
         for key in view_buttons.keys():
             ix = monitors[monitors['Ticker'] == key].index[0]
@@ -73,7 +78,12 @@ def app():
                     components.v1.iframe(monitors.loc[ix,'Dune embed'], width=600, height=400)
                 #components.v1.iframe('https://dune.xyz/embeds/208941/391702/2cbe40da-a0e4-43ac-896b-fef6d4d9fda7')
 
-
+        for key in delete_buttons.keys():
+            ix = monitors[monitors['Ticker'] == key].index[0]
+            delt = delete_buttons[key]
+            if(delt):
+                monitors = monitors.drop([ix], axis=0)
+                db.storage.dataframes.put(monitors.reset_index(drop=True), 'monitored_signals')
 
         st.markdown("""---""")
         st.write('**What is Crypto Tracker?**')

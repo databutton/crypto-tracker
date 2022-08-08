@@ -2,6 +2,6 @@ databutton
 ta
 ccxt
 pandas 
-streamlit_option_menu 
-discord_webhook
+streamlit-option-menu 
+discord-webhook
 plotly

@@ -2,6 +2,8 @@
 Crypto tracker continuously monitors Crypto assets on FTX of your choice, evaluates them against your chosen strategy, and sends you notifications on e-mail, Slack, or Discord.
 
 
+
+
 ## How to work with Crypto tracker 
 
 ### `databutton start`
