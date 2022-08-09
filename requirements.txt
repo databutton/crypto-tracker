@@ -5,3 +5,4 @@ pandas
 streamlit-option-menu 
 discord-webhook
 plotly
+streamlit-autorefresh
