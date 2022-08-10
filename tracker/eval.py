@@ -13,6 +13,7 @@ def eval():
         strategy_F    = indicators.list_of_strategies[strategy_name]
         current_advice = monitors.loc[ix, 'Signal']
         advice = strategy_F(row['Ticker'])
+        
         monitors.loc[ix, 'Signal'] = advice
         monitors.loc[ix, 'Checked'] = pd.Timestamp.today()
 
@@ -20,7 +21,7 @@ def eval():
         # Run notifications
         if(current_advice != advice):
             msg = monitors.loc[ix, 'Name'] + ' Signal is now advising you to '+advice + '. Previous advice was ' + current_advice
-            
+
             df_slack   = db.storage.dataframes.get('slack-config')
             if(len(df_slack)>0 and bool(df_slack.iloc[0].enabled)):
                 row = df_slack.iloc[0]

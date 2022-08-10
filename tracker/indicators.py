@@ -18,6 +18,11 @@ def register_indicator(name):
 #Register the strategy using a decorator
 @register_indicator('MACD with RSI')
 def macdrsi_indicator(ticker):
+    # ** Both Moving Average Convergence Divergence and RSI **
+    # Read more about utility and limitations of each indicator here:
+    # https://www.investopedia.com/terms/r/rsi.asp
+    # https://www.investopedia.com/terms/m/macd.asp
+
     #Define exchange
     ftx = ccxt.ftx()
     ftx.load_markets()
@@ -60,6 +65,11 @@ def macdrsi_indicator(ticker):
 #Register the strategy using a decorator
 @register_indicator('MACD')
 def macd_indicator(ticker):
+    # ** Moving Average Convergence Divergence **
+    # Read more about utility and limitations here:
+    # https://www.investopedia.com/terms/m/macd.asp
+    
+
     #Define exchange
     ftx = ccxt.ftx()
     ftx.load_markets()
@@ -93,6 +103,10 @@ def macd_indicator(ticker):
 #Register the strategy using a decorator
 @register_indicator('RSI')
 def rsi_indicator(ticker):
+    # ** Relative Strength Index **
+    # Read more about utility and limitations here:
+    # https://www.investopedia.com/terms/r/rsi.asp
+
     #Define exchange
     ftx = ccxt.ftx()
     ftx.load_markets()
@@ -103,7 +117,7 @@ def rsi_indicator(ticker):
     df['Date'] = pd.to_datetime(df.Date, unit='ms')
 
     #start eval
-    final_result = 'WAIT','WAIT'
+    final_result = 'WAIT'
     rsi = ta.momentum.rsi(df['Close'], window = 14)
     last_rsi = rsi.iloc[-1]
 
@@ -118,6 +132,10 @@ def rsi_indicator(ticker):
 #Register the strategy using a decorator
 @register_indicator('Stochastic Oscillator')
 def stochastic_indicator(ticker):
+    # ** Stochastic Oscillator **
+    # Read more about utility and limitations here:
+    # https://www.investopedia.com/terms/s/stochasticoscillator.asp
+    
     #Define exchange
     ftx = ccxt.ftx()
     ftx.load_markets()
@@ -128,7 +146,7 @@ def stochastic_indicator(ticker):
     df['Date'] = pd.to_datetime(df.Date, unit='ms')
 
     #start eval
-    final_result = 'WAIT','WAIT'
+    final_result = 'WAIT'
     si = ta.momentum.stoch_signal(df.High, df.Low, df.Close)
     last_si = si.iloc[-1]
 
@@ -139,10 +157,3 @@ def stochastic_indicator(ticker):
     
     return final_result
 
-
-
-#Register the strategy using a decorator
-@register_indicator(name='My Cool Strategy')  
-def my_cool_indicator(ticker):
-    # Write your code here
-    return 'BUY'
