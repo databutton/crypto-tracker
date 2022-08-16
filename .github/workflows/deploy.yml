@@ -1,0 +1,24 @@
+name: Deploy project
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-python@v3
+              with:
+                  python-version: "3.9"
+                  cache: "pip"
+
+            - name: Install dependencies
+              run: pip install -r requirements.txt
+
+            - run: databutton deploy
+              env:
+                  DATABUTTON_TOKEN: ${{ secrets.DATABUTTON_TOKEN }}
