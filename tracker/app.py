@@ -52,8 +52,8 @@ def app():
             t4.write(row['Indicator'])
             t5.write(row['Checked'])
             with t6.expander("Actions"):
-                view_buttons[row['Ticker']] = st.button('View', key=str(ix))
-                delete_buttons[row['Ticker']] = st.button('Delete', key=str(ix), disabled=editing_disabled)
+                view_buttons[row['Ticker']] = st.button('View', key='Add'+str(ix))
+                delete_buttons[row['Ticker']] = st.button('Delete', key='delete'+str(ix), disabled=editing_disabled)
 
         for key in view_buttons.keys():
             ix = monitors[monitors['Ticker'] == key].index[0]

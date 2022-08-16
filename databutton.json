@@ -6,7 +6,7 @@
     ".venv",
     "__pycache__",
     ".databutton", 
-    "myscecrets", 
+    "mysecrets", 
     ".git"
   ]
 }
