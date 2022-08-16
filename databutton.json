@@ -6,7 +6,9 @@
     ".venv",
     "__pycache__",
     ".databutton", 
-    "mysecrets", 
-    ".git"
+    "mysecrets",
+    "discord-webhook",
+    ".git",
+    ".ipynb_checkpoints"
   ]
 }
