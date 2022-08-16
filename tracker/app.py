@@ -14,19 +14,22 @@ import plotly.graph_objects as go
 
 @db.apps.streamlit(route='/app')
 def app():
+    editing_disabled=False
     ftx = ccxt.ftx()
-    markets = ftx.load_markets()
+    markets =  ftx.load_markets()
     monitors = db.storage.dataframes.get('monitored_signals')
 
     with st.sidebar:
-         selected = option_menu("Crypto Databutler", ["Status", "Add Signal", 'Indicators', 'Notifications'], 
+         selected = option_menu("Crypto Databutler", ["Status", "Add Tracker", 'Indicators', 'Notifications'], 
          icons=['house', 'gear','send','pen'], menu_icon="cast", default_index=0)
          selected
+         if(editing_disabled==True):
+            st.write('**Note**: All editing has been disabled in this public facing version. If you duplicate the project, you can turn that back on through changing the first line of app.py. ')
 
          
 
     if(selected=='Status'):
-        st.title('Signals')
+        st.title('Trackers')
         st.markdown("""---""")
         show = st.container()
 
@@ -50,7 +53,7 @@ def app():
             t5.write(row['Checked'])
             with t6.expander("Actions"):
                 view_buttons[row['Ticker']] = st.button('View', key=str(ix))
-                delete_buttons[row['Ticker']] = st.button('Delete', key=str(ix))
+                delete_buttons[row['Ticker']] = st.button('Delete', key=str(ix), disabled=editing_disabled)
 
         for key in view_buttons.keys():
             ix = monitors[monitors['Ticker'] == key].index[0]
@@ -87,28 +90,28 @@ def app():
         st.write('''
                     Crypto Databutler continuously monitors Crypto assets on FTX of your choice, 
                     evaluates them against your chosen indicator, 
-                    and sends you notifications on e-mail, Slack, or Discord.
+                    and sends you notifications on Slack, or Discord.
                     
                     ''')
 
         
 
-    elif(selected=='Add Signal'):
-        st.title('Add a new Signal')
-        st.write('''Here you can add a new Signal. Note that all Signals act on the FTX exchange. 
+    elif(selected=='Add Tracker'):
+        st.title('Add a new Tracker')
+        st.write('''Here you can add a new Tracker. Note that all Tracker act on the FTX exchange. 
                     If you have a Dune dashboard you normally use, you can embed that with the tracker. ''')
 
 
         
        
 
-        with st.expander("Add a new Signal", expanded=True): 
+        with st.expander("Add a new Tracker", expanded=True): 
             name     = st.text_input('Name')
             ticker   = st.selectbox('Market',   options=markets.keys())
             strategy = st.selectbox('Indicator', options=list_of_strategies.keys())
             descript = st.text_area('Description')
             dune     = st.text_input('Dune embed url')
-            add      = st.button('Add')
+            add      = st.button('Add', disabled=editing_disabled)
     
 
             if(add):
@@ -124,7 +127,7 @@ def app():
 
     elif(selected=='Notifications'):
         st.title('Notification settings')
-        st.write('''When a Signal changes its recommendation, 
+        st.write('''When a Tracker changes its recommendation, 
         you will be notified in all the ways you configure below.
         ''')
         with st.expander("Setup Slack notifications"):
@@ -145,11 +148,11 @@ def app():
                 slack_user_name = st.text_input(label='User name', value=row['user name'])
                 slack_enabled = st.checkbox(label='Enabled', value=row['enabled'])
             
-            test = st.button('Test')
+            test = st.button('Test', disabled=editing_disabled)
             if(test and bool(slack_enabled)):
                 post_message_to_slack('I am the Crypto bot', slack_channel, slack_icon_emoji, slack_user_name)
             
-            save = st.button('Save', disabled=True)
+            save = st.button('Save', disabled=editing_disabled)
             if(save):
                 df_slack = pd.DataFrame(columns=['channel', 'user name', 'icon_emoji', 'enabled'])
                 df_slack['channel']   = [slack_channel]
@@ -173,12 +176,12 @@ def app():
                 webhook = st.text_input(label='Webhook url', value=row['url'])
                 wh_enabled = st.checkbox(label='Enabled', value=row['enabled'], key='when')
 
-            ds_test = st.button('Test', key='ds_test')
+            ds_test = st.button('Test', key='ds_test', disabled=editing_disabled)
             if(ds_test and bool(wh_enabled)):
                 webhook = DiscordWebhook(url=webhook, content='I am the crypto bot')
                 webhook.execute()
 
-            ds_save = st.button('Save', key='ds_save', disabled=True)
+            ds_save = st.button('Save', key='ds_save', disabled=editing_disabled)
             if(ds_save):
                 df_discord = pd.DataFrame(data=[[webhook, wh_enabled]],columns=['url', 'enabled'])
                 db.storage.dataframes.put(df_discord.reset_index(drop=True), 'discord-config')
@@ -188,7 +191,7 @@ def app():
 
     elif(selected=='Indicators'):
         st.title('Indicators')
-        st.write('''Here you can can find all the indicators available to use with a Signal.
+        st.write('''Here you can can find all the indicators available to use with a Tracker.
                     To add your own indicator, first you need to duplicate the project. Then, you need 
                     to open **indicators.py** and add your own function like the ones below -- that is it.
         ''')

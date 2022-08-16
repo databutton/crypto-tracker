@@ -15,6 +15,7 @@ def register_indicator(name):
 
 
 
+
 #Register the strategy using a decorator
 @register_indicator('MACD with RSI')
 def macdrsi_indicator(ticker):
@@ -62,6 +63,8 @@ def macdrsi_indicator(ticker):
     return final_result
 
 
+
+
 #Register the strategy using a decorator
 @register_indicator('MACD')
 def macd_indicator(ticker):
@@ -97,6 +100,8 @@ def macd_indicator(ticker):
             macd_result = 'BUY' if last_hist > 0 else 'SELL'
             
     return macd_result
+
+
 
 
 
@@ -157,3 +162,13 @@ def stochastic_indicator(ticker):
     
     return final_result
 
+
+# Register the indicator
+@register_indicator('My Great New Magic Indicator')
+def my_great_indicator(ticker):
+
+    # Download ticker data
+    # Do your magic 
+
+    # Return a signal
+    return 'BUY'
